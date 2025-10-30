@@ -1,4 +1,5 @@
 from io import BytesIO
+import struct
 
 from .tlobject import TLObject
 
@@ -24,6 +25,15 @@ class Int128(Int):
 
 class Int256(Int):
     LENGTH = 32
+
+
+class Double(TLObject):
+    def serialize(self):
+        return struct.pack('<d', self.value)
+
+    @classmethod
+    def deserialize(cls, data: BytesIO):
+        return struct.unpack('<d', data.read(8))[0]
 
 
 class Bool(TLObject):
@@ -73,3 +83,28 @@ class String(Bytes):
     @classmethod
     def deserialize(cls, data: BytesIO) -> str:
         return super().deserialize(data).decode(errors="replace")
+
+
+class Vector(TLObject):
+    ID = 0x1CB5C415
+
+    def serialize(self):
+        result = Int(self.ID).serialize()
+        result += Int(len(self.value)).serialize()
+
+        for item in self.value:
+            result += item.serialize()
+
+        return result
+
+    @classmethod
+    def deserialize(cls, data: BytesIO, type):
+        constructor = Int.deserialize(data)
+        count = Int.deserialize(data)
+
+        items = []
+        for _ in range(count):
+            item = type.deserialize(data)
+            items.append(item)
+
+        return items
