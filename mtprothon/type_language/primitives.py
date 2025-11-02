@@ -108,13 +108,13 @@ class Vector(TLObject):
         return result
 
     @classmethod
-    def deserialize(cls, data: BytesIO, type):
+    def deserialize(cls, data: BytesIO, t):
         constructor = Int.deserialize(data)
         count = Int.deserialize(data)
 
         items = []
         for _ in range(count):
-            item = type.deserialize(data)
+            item = t.deserialize(data)
             items.append(item)
 
         return items
