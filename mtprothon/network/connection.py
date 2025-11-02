@@ -1,27 +1,25 @@
-import socket
+import typing
 import time
+
+from .tcp import TCP
+from .tcpabridged import TCPAbridged
 
 
 class Connection:
-    HOST = "149.154.167.40"
-    PORT = 443
-    TIMEOUT = 20
-
-    def __init__(self):
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.settimeout(self.TIMEOUT)
+    def __init__(self, tcp: typing.Type[TCP] = TCPAbridged):
+        self.tcp = tcp()
 
     def start(self):
-        self.sock.connect((self.HOST, self.PORT))
+        self.tcp.connect()
 
     def stop(self):
-        self.sock.close()
+        self.tcp.disconnect()
 
     def send(self, data: bytes):
-        self.sock.send(data)
+        self.tcp.send(data)
 
     def recv(self, bufsize: int) -> bytes:
-        return self.sock.recv(bufsize)
+        return self.tcp.recv(bufsize)
 
     @staticmethod
     def generate_message_id() -> int:
