@@ -65,14 +65,24 @@ class Bytes(TLObject):
 
     @classmethod
     def deserialize(cls, data: BytesIO) -> bytes:
-        first_byte = int.from_bytes(data.read(1), byteorder="little")
+        first_byte_data = data.read(1)
+        first_byte = first_byte_data[0]
 
         if first_byte <= 253:
             length = first_byte
+            length_bytes_read = 1
         else:
-            length = int.from_bytes(data.read(3), byteorder="little")
+            length_data = data.read(3)
+            length = int.from_bytes(length_data, 'little')
+            length_bytes_read = 4
 
-        return data.read(length)
+        result = data.read(length)
+
+        total_read = length_bytes_read + length
+        padding = (4 - (total_read % 4)) % 4
+        data.read(padding)
+
+        return result
 
 
 class String(Bytes):
