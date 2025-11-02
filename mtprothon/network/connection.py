@@ -18,7 +18,7 @@ class Connection:
     def send(self, data: bytes):
         self.tcp.send(data)
 
-    def recv(self, bufsize: int) -> bytes:
+    def recv(self, bufsize: int = 0) -> bytes:
         return self.tcp.recv(bufsize)
 
     @staticmethod

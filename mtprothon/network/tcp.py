@@ -19,5 +19,5 @@ class TCP:
     def send(self, data: bytes):
         self.sock.send(data)
 
-    def recv(self, bufsize: int) -> bytes:
+    def recv(self, bufsize: int = 0) -> bytes:
         return self.sock.recv(bufsize)

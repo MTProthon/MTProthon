@@ -19,7 +19,7 @@ class TCPAbridged(TCP):
 
         super().send(data)
 
-    def recv(self, bufsize: int) -> bytes:
+    def recv(self, bufsize: int = 0) -> bytes:
         length_byte = super().recv(1)[0]
 
         if length_byte <= 126:
