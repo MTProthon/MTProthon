@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "MTProthon"
+version = "0.0.1"
+description = "A library for creating bots in the Telegram messenger"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+  {name = "Sajjad", email = "sajjadalipour2006@gmail.com"},
+  {name = "Abolfazl Amiri", email = "soltshen@gmail.com"}
+]
+keywords = ["telegram", "messenger", "bot", "api", "client", "mtproto"]
+classifiers = [
+    "License :: OSI Approved :: MIT License"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/MTProthon/MTProthon"
+"Tracker" = "https://github.com/MTProthon/MTProthon/issues"
+"Community" = "https://t.me/MTProthon_Group"
