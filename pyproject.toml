@@ -21,3 +21,6 @@ classifiers = [
 "Homepage" = "https://github.com/MTProthon/MTProthon"
 "Tracker" = "https://github.com/MTProthon/MTProthon/issues"
 "Community" = "https://t.me/MTProthon_Group"
+
+[tool.setuptools]
+packages = ["mtprothon"]
