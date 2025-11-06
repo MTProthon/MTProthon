@@ -11,11 +11,11 @@ class Message(TLObject):
         self.length = length
         self.data = data
 
-    def serialize(self):
+    def serialize(self) -> bytes:
         return self.auth_key_id + Long(self.id).serialize() + Int(self.length).serialize() + self.data
 
     @classmethod
-    def deserialize(cls, data: BytesIO):
+    def deserialize(cls, data: BytesIO) -> "Message":
         auth_key_id = data.read(8)
 
         id = Long.deserialize(data)

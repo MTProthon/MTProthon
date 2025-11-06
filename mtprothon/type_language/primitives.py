@@ -4,7 +4,12 @@ import struct
 from .tlobject import TLObject
 
 
-class Int(TLObject):
+class Primitive(TLObject):
+    def __init__(self, value):
+        self.value = value
+
+
+class Int(Primitive):
     LENGTH = 4
 
     def serialize(self, signed: bool = True) -> bytes:
@@ -27,7 +32,7 @@ class Int256(Int):
     LENGTH = 32
 
 
-class Double(TLObject):
+class Double(Primitive):
     def serialize(self):
         return struct.pack('<d', self.value)
 
@@ -36,7 +41,7 @@ class Double(TLObject):
         return struct.unpack('<d', data.read(8))[0]
 
 
-class Bool(TLObject):
+class Bool(Primitive):
     BOOL_TRUE = 0x997275b5
     BOOL_FALSE = 0xbc799737
 
@@ -49,7 +54,7 @@ class Bool(TLObject):
         return Int.deserialize(data, signed=False) == cls.BOOL_TRUE
 
 
-class Bytes(TLObject):
+class Bytes(Primitive):
     def serialize(self) -> bytes:
         length = len(self.value)
 
@@ -95,10 +100,17 @@ class String(Bytes):
         return super().deserialize(data).decode(errors="replace")
 
 
-class Vector(TLObject):
+class Vector(Primitive):
     ID = 0x1CB5C415
 
-    def serialize(self):
+    def __class_getitem__(cls, item):
+        return cls(t=item)
+
+    def __init__(self, value=None, t=None):
+        self.value = value
+        self.t = t
+
+    def serialize(self) -> bytes:
         result = Int(self.ID).serialize()
         result += Int(len(self.value)).serialize()
 
@@ -107,14 +119,13 @@ class Vector(TLObject):
 
         return result
 
-    @classmethod
-    def deserialize(cls, data: BytesIO, t):
+    def deserialize(self, data: BytesIO) -> list:
         constructor = Int.deserialize(data)
         count = Int.deserialize(data)
 
         items = []
         for _ in range(count):
-            item = t.deserialize(data)
+            item = self.t.deserialize(data)
             items.append(item)
 
         return items
