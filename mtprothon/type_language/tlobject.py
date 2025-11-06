@@ -16,6 +16,16 @@ class TLObject:
     def get_values(self):
         return self.__dict__.values()
 
+    def serialize(self) -> bytes:
+        buffer = BytesIO()
+
+        buffer.write(self.ID.to_bytes(length=4, byteorder="little"))
+
+        for t, value in zip(self.get_tl_types(), self.get_values()):
+            buffer.write(t(value).serialize())
+
+        return buffer.getvalue()
+
     @classmethod
     def deserialize(cls, data: BytesIO) -> "TLObject":
         constructor = data.read(4)
