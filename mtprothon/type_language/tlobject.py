@@ -25,6 +25,6 @@ class TLObject:
         constructor = data.read(4)
 
         if constructor != cls.ID.to_bytes(length=4, byteorder="little"):
-            raise ValueError(f"Expected {TLObject.__name__} constructor, got {constructor.hex()}")
+            raise ValueError(f"Expected {cls.__name__} constructor, got {constructor.hex()}")
 
         return cls(*[t.deserialize(data) for t in cls.conversion_types])
