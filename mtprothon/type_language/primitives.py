@@ -106,7 +106,7 @@ class Vector(Primitive):
     def __class_getitem__(cls, item):
         return cls(t=item)
 
-    def __init__(self, value=None, t=None):
+    def __init__(self, value=None, *, t=None):
         self.value = value
         self.t = t
 

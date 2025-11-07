@@ -22,5 +22,5 @@ classifiers = [
 "Tracker" = "https://github.com/MTProthon/MTProthon/issues"
 "Community" = "https://t.me/MTProthon_Group"
 
-[tool.setuptools]
-packages = ["mtprothon"]
+[tool.setuptools.packages.find]
+include = ["mtprothon*"]
